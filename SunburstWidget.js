@@ -54,29 +54,57 @@ onCustomWidgetAfterUpdate(changedProperties) {
 }
 
 
+transformToHierarchy(data) {
+    let hierarchy = { name: "root", children: [] };
+
+    let map = {};
+
+    data.forEach(item => {
+        let node = {
+            name: item.dimensions_0.label,
+            value: item.measures_0.raw,
+            children: []
+        };
+
+        map[item.dimensions_0.id] = node;
+
+        let parent = item.dimensions_0.parentId ? map[item.dimensions_0.parentId] : hierarchy;
+
+        if (!parent) {
+            console.error("Parent not found for", item);
+            return;
+        }
+
+        parent.children.push(node);
+    });
+
+    return hierarchy;
+}
+
+
+
 _updateData(dataBinding) {
     console.log('dataBinding:', dataBinding);
 
-     
+    // Check if dataBinding is in a loading state
     if (dataBinding && dataBinding.state === 'loading') {
         console.log('Data is still loading...');
-        return; 
+        return;  // Exit the function early
     }
 
-    if (!dataBinding) {
-        console.error('dataBinding is undefined');
-    }
+    // Check if dataBinding.data exists
     if (!dataBinding || !dataBinding.data) {
         console.error('dataBinding.data is undefined');
+        return;  // Exit the function early
     }
     
     if (this._ready) {
-        // Check if dataBinding and dataBinding.data are defined
-        if (dataBinding && Array.isArray(dataBinding.data)) {
+        // Check if dataBinding.data is an array
+        if (Array.isArray(dataBinding.data)) {
             // Transform the data into the correct format
             const transformedData = dataBinding.data.map(row => {
                 console.log('row:', row);
-                // Check if dimensions_0 and measures_0 are defined before trying to access their properties
+                // Check if dimensions_0 and measures_0 are defined
                 if (row.dimensions_0 && row.measures_0) {
                     return {
                         dimension: row.dimensions_0.label,
@@ -85,12 +113,17 @@ _updateData(dataBinding) {
                 }
             }).filter(Boolean);  // Filter out any undefined values
 
-            this._renderChart(transformedData);
+            // Transform the flat data into a hierarchical structure
+            const hierarchicalData = transformToHierarchy(transformedData);
+
+            // Render the chart with the hierarchical data
+            this._renderChart(hierarchicalData);
         } else {
-            console.error('Data is not an array:', dataBinding && dataBinding.data);
+            console.error('Data is not an array:', dataBinding.data);
         }
     }
 }
+
 
         _renderChart(data) {
             const width = this._props.width || 500;
