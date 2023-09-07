@@ -121,6 +121,7 @@ _updateData(dataBinding) {
 
 
         _renderChart(data) {
+               console.log("Rendering with data:", data);
             const width = this._props.width || 500;
             const height = this._props.height || 500;
             const radius = Math.min(width, height) / 2;
