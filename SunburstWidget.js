@@ -121,7 +121,7 @@ _updateData(dataBinding) {
 
             // Transform the flat data into a hierarchical structure
       const hierarchicalData = this.transformToHierarchy(transformedData);
-
+ console.log(hierarchicalData);
 
             // Render the chart with the hierarchical data
             this._renderChart(hierarchicalData);
