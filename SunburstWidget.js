@@ -107,21 +107,8 @@ _updateData(dataBinding) {
     if (this._ready) {
         // Check if dataBinding.data is an array
         if (Array.isArray(dataBinding.data)) {
-            // Transform the data into the correct format
-            const transformedData = dataBinding.data.map(row => {
-                console.log('row:', row);
-                // Check if dimensions_0 and measures_0 are defined
-                if (row.dimensions_0 && row.measures_0) {
-                    return {
-                        dimension: row.dimensions_0.label,
-                        measure: row.measures_0.raw
-                    };
-                }
-            }).filter(Boolean);  // Filter out any undefined values
-
             // Transform the flat data into a hierarchical structure
-      const hierarchicalData = this.transformToHierarchy(transformedData);
- console.log(hierarchicalData);
+            const hierarchicalData = this.transformToHierarchy(dataBinding.data);
 
             // Render the chart with the hierarchical data
             this._renderChart(hierarchicalData);
@@ -130,6 +117,7 @@ _updateData(dataBinding) {
         }
     }
 }
+
 
 
         _renderChart(data) {
