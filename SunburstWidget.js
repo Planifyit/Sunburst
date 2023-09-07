@@ -114,7 +114,8 @@ _updateData(dataBinding) {
             }).filter(Boolean);  // Filter out any undefined values
 
             // Transform the flat data into a hierarchical structure
-            const hierarchicalData = transformToHierarchy(transformedData);
+      const hierarchicalData = this.transformToHierarchy(transformedData);
+
 
             // Render the chart with the hierarchical data
             this._renderChart(hierarchicalData);
