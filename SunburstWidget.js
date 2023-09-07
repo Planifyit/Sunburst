@@ -56,13 +56,18 @@ onCustomWidgetAfterUpdate(changedProperties) {
 
 transformToHierarchy(data) {
     let hierarchy = { name: "root", children: [] };
-
     let map = {};
 
     data.forEach(item => {
+        // Check if dimensions_0 exists before accessing its properties
+        if (!item.dimensions_0) {
+            console.error("Missing dimensions_0 for item:", item);
+            return;  // Skip this iteration
+        }
+
         let node = {
             name: item.dimensions_0.label,
-            value: item.measures_0.raw,
+            value: item.measures_0 ? item.measures_0.raw : 0,  // Also added a check for measures_0
             children: []
         };
 
@@ -80,6 +85,7 @@ transformToHierarchy(data) {
 
     return hierarchy;
 }
+
 
 
 
