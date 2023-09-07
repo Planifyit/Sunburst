@@ -56,6 +56,8 @@ onCustomWidgetAfterUpdate(changedProperties) {
 
 _updateData(dataBinding) {
     console.log('dataBinding:', dataBinding);
+    console.log('Full dataBinding object:', JSON.stringify(dataBinding, null, 2));  
+
     if (!dataBinding) {
         console.error('dataBinding is undefined');
     }
