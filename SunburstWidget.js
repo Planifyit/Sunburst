@@ -21,6 +21,18 @@ g:hover {
     transform-origin: center center;
     cursor: pointer;
 }
+.sunburst-arc {
+    stroke: #fff;
+    transition: transform 0.3s ease-out;
+}
+
+.sunburst-arc:hover {
+    transform: scale(1.1);
+    transform-origin: center center;
+    cursor: pointer;
+}
+
+
         .sunburst-arc text {
             fill: #fff;
             font: 10px sans-serif;
@@ -196,7 +208,6 @@ const paths = groups.append("path")
         }
     })
     .attr("d", arc)
-    .attr("pointer-events", "none")  // Prevent flickering
     .append("title")
     .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${d.value}`);
 
