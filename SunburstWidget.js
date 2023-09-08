@@ -176,7 +176,7 @@ const partition = data => {
     const arc = d3.arc()
         .startAngle(d => d.x0)
         .endAngle(d => d.x1)
-        .innerRadius(d => d.y0 * radius)
+        .innerRadius(d => d.y0 * radius * 0.9)
         .outerRadius(d => d.y1 * radius);
 
     const svg = d3.select(this._shadowRoot.getElementById('chart')).append("svg")
