@@ -18,7 +18,7 @@
 
 .sunburst-arc:hover {
     transform: scale(1.1);
-    transform-origin: center;
+    transform-origin: 50% 50%;
     cursor: pointer;
 }
         .sunburst-arc text {
@@ -26,10 +26,8 @@
             font: 10px sans-serif;
             text-anchor: middle;
         }
-        g:hover {
-    transform: scale(1.1);
-    transform-origin: center;
-    cursor: pointer;
+svg {
+    overflow: visible;
 }
 
         svg {
@@ -177,8 +175,8 @@ const topLevelParents = [...new Set(root.children.map(d => d.data.name))];
         .attr("width", width)
         .attr("height", height);
 
-    const centerGroup = svg.append("g")
-        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+const centerGroup = svg.append("g")
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
     const groups = centerGroup.selectAll("g")
         .data(root.descendants().filter(d => d.depth))
