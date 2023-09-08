@@ -133,9 +133,11 @@ _updateData(dataBinding) {
 
         _renderChart(data) {
                console.log("Rendering with data:", data);
-const width = this._props.width || this.offsetWidth;
-const height = this._props.height || this.offsetHeight;
-     const radius = Math.min(width, height) / 20; 
+const scaleFactor = 0.7;  // 30% smaller
+const width = (this._props.width || 500) * scaleFactor;
+const height = (this._props.height || 500) * scaleFactor;
+const radius = Math.min(width, height) / 2;
+
 
             d3.select(this._shadowRoot.getElementById('chart')).selectAll("*").remove();
 
