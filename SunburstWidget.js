@@ -131,88 +131,68 @@ _updateData(dataBinding) {
 
 
 
-        _renderChart(data) {
-               console.log("Rendering with data:", data);
+  _renderChart(data) {
+    console.log("Rendering with data:", data);
 
-const width = this._props.width || this.offsetWidth;
-const height = this._props.height || this.offsetHeight;            
-const radius = Math.min(width, height) / 20;  // Dividing by 20 instead of 2
-const topLevelParents = [...new Set(data.children.map(d => d.name))];
-console.log("Top Level Parents:", topLevelParents);
+    const width = this._props.width || this.offsetWidth;
+    const height = this._props.height || this.offsetHeight;            
+    const radius = Math.min(width, height) / 20;  // Dividing by 20 instead of 2
 
+    d3.select(this._shadowRoot.getElementById('chart')).selectAll("*").remove();
 
+    const partition = data => {
+        const root = d3.hierarchy(data)
+            .sum(d => d.value)
+            .sort((a, b) => b.value - a.value);
+        return d3.partition()
+            .size([2 * Math.PI, root.height + 1])(root);
+    };
 
+    const root = partition(data);
+    const topLevelParents = [...new Set(root.descendants().filter(d => d.depth === 1).map(d => d.data.name))];
+    console.log("Top Level Parents:", topLevelParents);
 
-            d3.select(this._shadowRoot.getElementById('chart')).selectAll("*").remove();
+    const color = d3.scaleOrdinal()
+        .domain(topLevelParents)
+        .range(d3.schemeCategory10);  // or any other color scheme you prefer
+    console.log("Color for first parent:", color(topLevelParents[0]));
 
-   const color = d3.scaleOrdinal()
-    .domain(topLevelParents)
-    .range(d3.schemeCategory10);  // or any other color scheme you prefer
-console.log("Color for first parent:", color(topLevelParents[0]));
+    const arc = d3.arc()
+        .startAngle(d => d.x0)
+        .endAngle(d => d.x1)
+        .innerRadius(d => d.y0 * radius)
+        .outerRadius(d => d.y1 * radius);
 
+    const svg = d3.select(this._shadowRoot.getElementById('chart')).append("svg")
+        .attr("width", width)
+        .attr("height", height);
 
-   const arc = d3.arc()
-    .startAngle(d => d.x0)
-    .endAngle(d => d.x1)
-    .innerRadius(d => d.y0 * radius)
-    .outerRadius(d => d.y1 * radius);
+    const centerGroup = svg.append("g")
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
+    centerGroup.selectAll("path")
+        .data(root.descendants().filter(d => d.depth))
+        .enter().append("path")
+        .attr("class", "sunburst-arc")
+        .attr("fill", d => {
+            if (d.depth === 1) {
+                return color(d.data.name);
+            } else {
+                let topLevelParent = d;
+                while (topLevelParent.depth > 1) {
+                    topLevelParent = topLevelParent.parent;
+                }
+                return color(topLevelParent.data.name);
+            }
+        })
+        .attr("d", arc)
+        .append("title")
+        .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${d.value}`);
 
-
-const partition = data => {
-    const root = d3.hierarchy(data)
-        .sum(d => d.value)
-        .sort((a, b) => b.value - a.value);
-    return d3.partition()
-        .size([2 * Math.PI, root.height + 1])(root);
-};
-
-            
-
-const root = partition(data);
-const topLevelParents = [...new Set(root.descendants().filter(d => d.depth === 1).map(d => d.data.name))];
-
-
-const svg = d3.select(this._shadowRoot.getElementById('chart')).append("svg")
-    .attr("width", width)
-    .attr("height", height);
-
-const centerGroup = svg.append("g")
-    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-
-centerGroup.selectAll("path")
-    .data(root.descendants().filter(d => d.depth))
-    .enter().append("path")
-    .attr("class", "sunburst-arc")
-    
-.attr("fill", d => {
-    if (d.depth === 1) {
-        return color(d.data.name);
-    } else {
-        let topLevelParent = d;
-        while (topLevelParent.depth > 1) {
-            topLevelParent = topLevelParent.parent;
-        }
-        return color(topLevelParent.data.name);
-    }
-})
-
-
-    
-    .attr("d", arc)
-    .append("title")
-    .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${d.value}`);
-
-
-
-
-
-            
     console.log(root.descendants().filter(d => d.depth));
+    console.log("SVG:", svg);
+}
 
-                     console.log("SVG:", svg);
-          
-        }
  
     }
 
