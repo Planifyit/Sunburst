@@ -133,9 +133,9 @@ _updateData(dataBinding) {
 
         _renderChart(data) {
                console.log("Rendering with data:", data);
-const scaleFactor = 0.9;  // 10% smaller
-const width = (this._props.width || 500) * scaleFactor;
-const height = (this._props.height || 500) * scaleFactor;
+const chartDiv = this._shadowRoot.getElementById('chart');
+const width = chartDiv.clientWidth;
+const height = chartDiv.clientHeight;
 const radius = Math.min(width, height) / 2;
 
 
@@ -165,10 +165,11 @@ const partition = data => {
             const root = partition(data);
 
 const svg = d3.select(this._shadowRoot.getElementById('chart')).append("svg")
-    .attr("width", width)
-    .attr("height", height)
+    .attr("width", "100%")
+    .attr("height", "100%")
     .append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
 
 
 const centerGroup = svg.append("g")
