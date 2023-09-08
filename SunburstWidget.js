@@ -228,21 +228,36 @@ function truncateText(text, maxLength = 6) {
     centerGroup.selectAll("text")
         .data(root.descendants().filter(d => d.depth))
         .enter().append("text")
-        .attr("transform", function(d) {
-            const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
-            const y = d.y0 * radius * 0.9 + 5; // +5 to give a little padding
-            return `rotate(${x - 90}) translate(${y},0) ${x < 120 || x > 270 ? "" : "rotate(180)"}`;
-        })
+  .attr("transform", function(d) {
+    if (d.depth === 1) {
+        return "translate(0,0)"; // Center of the circle
+    } else {
+        const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
+        const y = d.y0 * radius + 5; // +5 to give a little padding
+        return `rotate(${x - 90}) translate(${y},0) ${x < 120 || x > 270 ? "" : "rotate(180)"}`;
+    }
+})
         .attr("dy", "0.35em")
-        .attr("text-anchor", d => (d.x0 + d.x1) / 2 * 180 / Math.PI < 120 || (d.x0 + d.x1) / 2 * 180 / Math.PI > 270 ? "start" : "end")
+       .attr("text-anchor", d => {
+    if (d.depth === 1) {
+        return "middle";
+    } else {
+        return (d.x0 + d.x1) / 2 * 180 / Math.PI < 120 || (d.x0 + d.x1) / 2 * 180 / Math.PI > 270 ? "start" : "end";
+    }
+})
+
         .text(d => truncateText(d.data.name)) // Apply truncation here
         .attr("fill", "black")
-        .attr("font-size", function(d) {
-            const textLength = this.getComputedTextLength();
-            const segmentWidth = (d.x1 - d.x0) * radius * 0.9 * Math.PI; // arc length
-            const fontSize = Math.min(12, 12 * segmentWidth / textLength); // adjust 12 as needed
-            return fontSize + "px";
-        })
+   .attr("font-size", function(d) {
+    if (d.depth === 1) {
+        return "16px"; // Or any other size you prefer for the top parent
+    } else {
+        const textLength = this.getComputedTextLength();
+        const segmentWidth = (d.x1 - d.x0) * radius * Math.PI; // arc length
+        const fontSize = Math.min(12, 12 * segmentWidth / textLength); // adjust 12 as needed
+        return fontSize + "px";
+    }
+})
         .attr("pointer-events", "none");
 }
  
