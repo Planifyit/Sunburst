@@ -10,14 +10,7 @@
     background-repeat: no-repeat;
     background-position: center;
     }
-    
-        .sunburst-arc {
-            stroke: #fff;
-            transition: transform 0.3s ease-out;
-        }
-
-
-.sunburst-arc {
+    .sunburst-arc {
     stroke: #fff;
     transition: transform 0.3s ease-out;
 }
@@ -28,19 +21,23 @@
     cursor: pointer;
 }
 
+.sunburst-arc text {
+    fill: #fff;
+    font: 10px sans-serif;
+    text-anchor: middle;
+}
 
-        .sunburst-arc text {
-            fill: #fff;
-            font: 10px sans-serif;
-            text-anchor: middle;
-        }
 svg {
     overflow: visible;
-}
-
-        svg {
     background-color: transparent; /* or any other color */
 }
+
+#chart {
+    width: 100%;
+    height: 80%;  /* Adjust this value as needed */
+    overflow: hidden;  /* This will ensure that the SVG doesn't overflow its container */
+}
+
 #chart {
     width: 100%;
     height: 80%;  /* Adjust this value as needed */
