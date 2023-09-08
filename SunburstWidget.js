@@ -13,17 +13,14 @@
     
 .sunburst-arc {
     stroke: #fff;
-    transition: transform 0.3s ease-out;
+    transition: fill 0.3s ease-out;  /* Transition for the fill color */
 }
 
-g:hover {
-    transform: scale(1.1);
-    transform-origin: center center;
+.sunburst-arc:hover {
+    fill-opacity: 0.7;  /* Darken the segment on hover */
     cursor: pointer;
 }
-.sunburst-arc, .sunburst-arc text {
-    transition: transform 0.3s ease-out;
-}
+
 .sunburst-arc text {
     fill: #fff;
     font: 10px sans-serif;
@@ -32,13 +29,13 @@ g:hover {
 
 svg {
     overflow: visible;
-    background-color: transparent; /* or any other color */
+    background-color: transparent; 
 }
 
 #chart {
     width: 100%;
-    height: 80%;  /* Adjust this value as needed */
-    overflow: visible;  /* Change this to visible */
+    height: 80%;
+    overflow: visible;
 }
 
 
