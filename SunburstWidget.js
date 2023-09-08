@@ -197,12 +197,12 @@ _updateData(dataBinding) {
     console.log(root.descendants().filter(d => d.depth));
     console.log("SVG:", svg);
 
-     centerGroup.selectAll("text")
+centerGroup.selectAll("text")
         .data(root.descendants().filter(d => d.depth))
         .enter().append("text")
         .attr("transform", function(d) {
             const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
-            const y = (d.y0 + d.y1) / 2 * radius;
+            const y = d.y0 * radius + 5; // +5 to give a little padding
             return `rotate(${x - 90}) translate(${y},0) ${x < 120 || x > 270 ? "" : "rotate(180)"}`;
         })
         .attr("dy", "0.35em")
@@ -211,13 +211,12 @@ _updateData(dataBinding) {
         .attr("fill", "black")
         .attr("font-size", function(d) {
             const textLength = this.getComputedTextLength();
-            const segmentWidth = (d.x1 - d.x0) * radius;
-            const fontSize = Math.min(2 * d.r, (2 * d.r - 8) / textLength * 12);
-            return segmentWidth < textLength ? fontSize * 0.8 + "px" : fontSize + "px";
+            const segmentWidth = (d.x1 - d.x0) * radius * Math.PI; // arc length
+            const fontSize = Math.min(12, 12 * segmentWidth / textLength); // adjust 12 as needed
+            return fontSize + "px";
         })
         .attr("pointer-events", "none");
 }
-
  
     }
 
