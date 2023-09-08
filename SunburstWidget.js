@@ -16,11 +16,7 @@
             transition: transform 0.3s ease-out;
         }
 
-g:hover {
-    transform: scale(1.1);
-    transform-origin: center center;
-    cursor: pointer;
-}
+
 .sunburst-arc {
     stroke: #fff;
     transition: transform 0.3s ease-out;
