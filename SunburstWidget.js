@@ -153,6 +153,8 @@ _updateData(dataBinding) {
                 .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
             svg.selectAll("path")
+                console.log(root.descendants().filter(d => d.depth));
+
                 .data(root.descendants().filter(d => d.depth))
                 .enter().append("path")
                 .attr("class", "sunburst-arc")
