@@ -28,6 +28,12 @@
         svg {
     background-color: transparent; /* or any other color */
 }
+#chart {
+    width: 100%;
+    height: 80%;  /* Adjust this value as needed */
+    overflow: hidden;  /* This will ensure that the SVG doesn't overflow its container */
+}
+
     </style>
     <div class="image-container"></div>  <!-- This is where your logo will be displayed -->
     <div id="chart"></div>
@@ -127,8 +133,8 @@ _updateData(dataBinding) {
 
         _renderChart(data) {
                console.log("Rendering with data:", data);
-            const width = this._props.width || 500;
-            const height = this._props.height || 500;
+const width = this._props.width || this.offsetWidth;
+const height = this._props.height || this.offsetHeight;
             const radius = Math.min(width, height) / 2;
 
             d3.select(this._shadowRoot.getElementById('chart')).selectAll("*").remove();
