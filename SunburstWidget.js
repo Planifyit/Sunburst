@@ -24,6 +24,7 @@
             font: 10px sans-serif;
             text-anchor: middle;
         }
+        
 
         svg {
     background-color: transparent; /* or any other color */
@@ -200,8 +201,7 @@ _updateData(dataBinding) {
 function truncateText(text, maxLength = 6) {
         return text.length > maxLength ? text.slice(0, maxLength) + '.' : text;
     }
-
-    const groups = centerGroup.selectAll("g")
+const groups = centerGroup.selectAll("g")
         .data(root.descendants().filter(d => d.depth))
         .enter().append("g");
 
