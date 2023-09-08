@@ -24,7 +24,11 @@
             font: 10px sans-serif;
             text-anchor: middle;
         }
-        
+        g:hover {
+    transform: scale(1.1);
+    transform-origin: center;
+    cursor: pointer;
+}
 
         svg {
     background-color: transparent; /* or any other color */
@@ -201,7 +205,7 @@ _updateData(dataBinding) {
 function truncateText(text, maxLength = 6) {
         return text.length > maxLength ? text.slice(0, maxLength) + '.' : text;
     }
-const groups = centerGroup.selectAll("g")
+  const groups = centerGroup.selectAll("g")
         .data(root.descendants().filter(d => d.depth))
         .enter().append("g");
 
@@ -240,7 +244,6 @@ const groups = centerGroup.selectAll("g")
         })
         .attr("pointer-events", "none");
 }
- 
     }
 
     customElements.define('sunburst-widget', SunburstWidget);
