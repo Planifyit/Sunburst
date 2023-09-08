@@ -11,12 +11,8 @@
     background-position: center;
     }
     
-    .sunburst-arc {
+.sunburst-arc {
     stroke: #fff;
-    transition: transform 0.3s ease-out;
-}
-
-.sunburst-arc, .sunburst-arc text {
     transition: transform 0.3s ease-out;
 }
 
@@ -42,6 +38,7 @@ svg {
     height: 80%;  /* Adjust this value as needed */
     overflow: visible;  /* Change this to visible */
 }
+
 
 
     </style>
