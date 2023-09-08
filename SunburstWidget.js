@@ -149,13 +149,15 @@ _updateData(dataBinding) {
     };
 
     const root = partition(data);
-    const topLevelParents = [...new Set(root.descendants().filter(d => d.depth === 2).map(d => d.parent.data.name))];
+ const topLevelParents = [...new Set(root.children.map(d => d.data.name))];
+
 
     console.log("Top Level Parents:", topLevelParents);
 
-    const color = d3.scaleOrdinal()
-        .domain(topLevelParents)
-        .range(d3.schemeCategory10);  // or any other color scheme you prefer
+  const color = d3.scaleOrdinal()
+    .domain(topLevelParents)
+    .range(d3.schemeCategory10);
+
     console.log("Color for first parent:", color(topLevelParents[0]));
 
     const arc = d3.arc()
@@ -175,17 +177,14 @@ _updateData(dataBinding) {
         .data(root.descendants().filter(d => d.depth))
         .enter().append("path")
         .attr("class", "sunburst-arc")
-        .attr("fill", d => {
-            if (d.depth === 1) {
-                return color(d.data.name);
-            } else {
-                let topLevelParent = d;
-                while (topLevelParent.depth > 1) {
-                    topLevelParent = topLevelParent.parent;
-                }
-                return color(topLevelParent.data.name);
-            }
-        })
+   .attr("fill", d => {
+    let topLevelParent = d;
+    while (topLevelParent.depth > 1) {
+        topLevelParent = topLevelParent.parent;
+    }
+    return color(topLevelParent.data.name);
+})
+
         .attr("d", arc)
         .append("title")
         .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${d.value}`);
