@@ -161,9 +161,10 @@ _updateData(dataBinding) {
                 .append("title")
                 .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${d.value}`);
 
+                     console.log("SVG:", svg);
           
         }
-          console.log("SVG:", svg);
+ 
     }
 
     customElements.define('sunburst-widget', SunburstWidget);
