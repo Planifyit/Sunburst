@@ -11,14 +11,19 @@
     background-position: center;
     }
     
-        .sunburst-arc {
-            stroke: #fff;
-            transition: transform 0.3s ease-out;
-        }
-        .sunburst-arc:hover {
-            transform: scale(1.1);
-            cursor: pointer;
-        }
+
+.sunburst-arc {
+    stroke: #fff;
+    transition: fill-opacity 0.3s ease-out;  /* Transition for the fill opacity */
+}
+
+.sunburst-arc:hover {
+    fill-opacity: 0.7;  /* Lighten the segment on hover */
+    cursor: pointer;
+}
+
+
+
         .sunburst-arc text {
             fill: #fff;
             font: 10px sans-serif;
