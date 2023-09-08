@@ -45,16 +45,16 @@
         }
 
         svg {
-    background-color: transparent; /* or any other color */
+    background-color: transparent;
 }
 #chart {
     width: 100%;
-    height: 80%;  /* Adjust this value as needed */
-    overflow: hidden;  /* This will ensure that the SVG doesn't overflow its container */
+    height: 80%; 
+    overflow: hidden;  
 }
 
     </style>
-    <div class="image-container"></div>  <!-- This is where your logo will be displayed -->
+    <div class="image-container"></div>  
     <div id="chart"></div>
     <a href="https://www.linkedin.com/company/planifyit" target="_blank" class="follow-link">Follow us on Linkedin - Planifyit</a>
     `;
@@ -118,7 +118,7 @@ transformToHierarchy(data) {
 }
 
 _handleSegmentClick(d) {
-    const { dimensions } = parseMetadata(this._props.metadata);  // Use the metadata from your props
+    const { dimensions } = parseMetadata(this._props.metadata);  // Use the metadata from  props
     const [dimension] = dimensions;
 
     const linkedAnalysis = this._props['dataBindings'].getDataBinding('myDataBinding').getLinkedAnalysis();
@@ -139,7 +139,7 @@ _handleSegmentClick(d) {
 
 _onResize() {
     // Re-render the chart when the widget is resized
-    this._renderChart(this.currentData);  // assuming you've stored the current data in this.currentData
+    this._renderChart(this.currentData);  // assuming  the current data is stored in this.currentData
 }
 
 _updateData(dataBinding) {
@@ -299,11 +299,11 @@ function truncateText(text, maxLength = 7) {
         .attr("fill", "black")
    .attr("font-size", function(d) {
     if (d.depth === 1) {
-        return "16px"; // Or any other size you prefer for the top parent
+        return "16px"; 
     } else {
         const textLength = this.getComputedTextLength();
-        const segmentWidth = (d.x1 - d.x0) * radius * Math.PI; // arc length
-        const fontSize = Math.min(12, 12 * segmentWidth / textLength); // adjust 12 as needed
+        const segmentWidth = (d.x1 - d.x0) * radius * Math.PI; 
+        const fontSize = Math.min(12, 12 * segmentWidth / textLength); 
         return fontSize + "px";
     }
 })
