@@ -197,7 +197,11 @@ _updateData(dataBinding) {
     console.log(root.descendants().filter(d => d.depth));
     console.log("SVG:", svg);
 
-centerGroup.selectAll("text")
+function truncateText(text, maxLength = 6) {
+        return text.length > maxLength ? text.slice(0, maxLength) + '.' : text;
+    }
+
+    centerGroup.selectAll("text")
         .data(root.descendants().filter(d => d.depth))
         .enter().append("text")
         .attr("transform", function(d) {
@@ -207,7 +211,7 @@ centerGroup.selectAll("text")
         })
         .attr("dy", "0.35em")
         .attr("text-anchor", d => (d.x0 + d.x1) / 2 * 180 / Math.PI < 120 || (d.x0 + d.x1) / 2 * 180 / Math.PI > 270 ? "start" : "end")
-        .text(d => d.data.name)
+        .text(d => truncateText(d.data.name)) // Apply truncation here
         .attr("fill", "black")
         .attr("font-size", function(d) {
             const textLength = this.getComputedTextLength();
