@@ -133,6 +133,12 @@ _updateData(dataBinding) {
 
         _renderChart(data) {
                console.log("Rendering with data:", data);
+const colorMapping = {
+    "North America": "blue",
+    "Europe": "green",
+    "Asia": "red"
+    // ... add other regions and colors as needed
+};
 
 const width = this._props.width || this.offsetWidth;
 const height = this._props.height || this.offsetHeight;            
@@ -143,7 +149,8 @@ const radius = Math.min(width, height) / 20;  // Dividing by 20 instead of 2
 
             d3.select(this._shadowRoot.getElementById('chart')).selectAll("*").remove();
 
-            const color = d3.scaleOrdinal(d3.schemeCategory10);
+      const color = d3.scaleOrdinal().domain(Object.keys(colorMapping)).range(Object.values(colorMapping));
+
 
    const arc = d3.arc()
     .startAngle(d => d.x0)
