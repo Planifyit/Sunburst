@@ -29,6 +29,7 @@
     background-color: transparent; /* or any other color */
 }
     </style>
+    <div class="image-container"></div>  <!-- This is where your logo will be displayed -->
     <div id="chart"></div>
     <a href="https://www.linkedin.com/company/planifyit" target="_blank" class="follow-link">Follow us on Linkedin - Planifyit</a>
     `;
