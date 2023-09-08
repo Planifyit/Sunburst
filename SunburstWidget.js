@@ -193,9 +193,26 @@ _updateData(dataBinding) {
         .attr("d", arc)
         .append("title")
         .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${d.value}`);
-
+      
     console.log(root.descendants().filter(d => d.depth));
     console.log("SVG:", svg);
+
+      centerGroup.selectAll("text")
+    .data(root.descendants().filter(d => d.depth))
+    .enter().append("text")
+    .attr("transform", function(d) {
+        const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
+        const y = (d.y0 + d.y1) / 2 * radius;
+        return `rotate(${x - 90}) translate(${y},0) ${x < 120 || x > 270 ? "" : "rotate(180)"}`;
+    })
+    .attr("dy", "0.35em")
+    .attr("text-anchor", d => (d.x0 + d.x1) / 2 * 180 / Math.PI < 120 || (d.x0 + d.x1) / 2 * 180 / Math.PI > 270 ? "start" : "end")
+    .text(d => d.data.name)
+    .attr("fill", "black")
+    .attr("font-size", d => Math.min(2 * d.r, (2 * d.r - 8) / this.getComputedTextLength() * 12) + "px")
+    .attr("pointer-events", "none");
+
+      
 }
 
  
