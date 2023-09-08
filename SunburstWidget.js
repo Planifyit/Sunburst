@@ -199,6 +199,10 @@ groups.append("path")
     .append("title")
     .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${d.value}`);
 
+          function truncateText(text, maxLength = 6) {
+        return text.length > maxLength ? text.slice(0, maxLength) + '.' : text;
+    }
+      
 groups.append("text")
     .attr("transform", function(d) {
         const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
