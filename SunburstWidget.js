@@ -221,9 +221,14 @@ const svg = d3.select(this._shadowRoot.getElementById('chart')).append("svg")
     console.log(root.descendants().filter(d => d.depth));
     console.log("SVG:", svg);
 
-function truncateText(text, maxLength = 6) {
-        return text.length > maxLength ? text.slice(0, maxLength) + '.' : text;
+function truncateText(text, maxLength = 7) {
+    if (text.length > maxLength) {
+        return [text.slice(0, maxLength - 1) + "-", text.slice(maxLength - 1)];
+    } else {
+        return [text];
     }
+}
+
 
     centerGroup.selectAll("text")
         .data(root.descendants().filter(d => d.depth))
@@ -246,7 +251,16 @@ function truncateText(text, maxLength = 6) {
     }
 })
 
-        .text(d => truncateText(d.data.name)) // Apply truncation here
+      .each(function(d) {
+    const textArray = truncateText(d.data.name);
+    for (let i = 0; i < textArray.length; i++) {
+        d3.select(this).append('tspan')
+            .attr('x', 0)
+            .attr('dy', i ? '1.2em' : 0) // This positions the second line below the first
+            .text(textArray[i]);
+    }
+})
+
         .attr("fill", "black")
    .attr("font-size", function(d) {
     if (d.depth === 1) {
