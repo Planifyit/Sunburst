@@ -169,7 +169,9 @@ const partition = data => {
 
             
 
-            const root = partition(data);
+const root = partition(data);
+const topLevelParents = [...new Set(root.descendants().filter(d => d.depth === 1).map(d => d.data.name))];
+
 
 const svg = d3.select(this._shadowRoot.getElementById('chart')).append("svg")
     .attr("width", width)
@@ -184,14 +186,17 @@ centerGroup.selectAll("path")
     .attr("class", "sunburst-arc")
     
 .attr("fill", d => {
-    let topLevelParent = d;
-    while (topLevelParent.depth > 1) {
-        topLevelParent = topLevelParent.parent;
+    if (d.depth === 1) {
+        return color(d.data.name);
+    } else {
+        let topLevelParent = d;
+        while (topLevelParent.depth > 1) {
+            topLevelParent = topLevelParent.parent;
+        }
+        return color(topLevelParent.data.name);
     }
-    const fillColor = color(topLevelParent.data.name);
-    console.log("Color for", topLevelParent.data.name, ":", fillColor);
-    return fillColor;
 })
+
 
     
     .attr("d", arc)
