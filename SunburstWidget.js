@@ -130,16 +130,17 @@ _updateData(dataBinding) {
 
             const color = d3.scaleOrdinal(d3.schemeCategory10);
 
-            const arc = d3.arc()
-                .startAngle(d => d.x0)
-                .endAngle(d => d.x1)
-                .innerRadius(d => d.y0 * radius)
-                .outerRadius(d => Math.min(d.y1 * radius, radius));
+   const arc = d3.arc()
+    .startAngle(d => d.x0)
+    .endAngle(d => d.x1)
+    .innerRadius(d => d.y0 * radius)
+    .outerRadius(d => d.y1 * radius);
+
 
 
 const partition = data => {
     const root = d3.hierarchy(data)
-        .sum(d => d.value)  // Use the value property to determine the size of each segment
+        .sum(d => d.value)
         .sort((a, b) => b.value - a.value);
     return d3.partition()
         .size([2 * Math.PI, root.height + 1])(root);
