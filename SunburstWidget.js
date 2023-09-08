@@ -15,12 +15,15 @@
     transition: transform 0.3s ease-out;
 }
 
-.sunburst-arc:hover {
-    transform: scale(1.1);
-    transform-origin: center center;
-    cursor: pointer;
+.sunburst-arc {
+    stroke: #fff;
+    transition: transform 0.3s ease-out;
 }
 
+g:hover .sunburst-arc {
+    transform: scale(1.1);
+    transform-origin: center center;
+}
 .sunburst-arc text {
     fill: #fff;
     font: 10px sans-serif;
@@ -38,11 +41,6 @@ svg {
     overflow: hidden;  /* This will ensure that the SVG doesn't overflow its container */
 }
 
-#chart {
-    width: 100%;
-    height: 80%;  /* Adjust this value as needed */
-    overflow: hidden;  /* This will ensure that the SVG doesn't overflow its container */
-}
 
     </style>
     <div class="image-container"></div>  <!-- This is where your logo will be displayed -->
@@ -141,7 +139,7 @@ _updateData(dataBinding) {
 
 
 
-  _renderChart(data) {
+_renderChart(data) {
     console.log("Rendering with data:", data);
 
     const width = this._props.width || this.offsetWidth;
@@ -159,14 +157,13 @@ _updateData(dataBinding) {
     };
 
     const root = partition(data);
-const topLevelParents = [...new Set(root.children.map(d => d.data.name))];
-
+    const topLevelParents = [...new Set(root.children.map(d => d.data.name))];
 
     console.log("Top Level Parents:", topLevelParents);
 
-  const color = d3.scaleOrdinal()
-    .domain(topLevelParents)
-    .range(d3.schemeCategory10);
+    const color = d3.scaleOrdinal()
+        .domain(topLevelParents)
+        .range(d3.schemeCategory10);
 
     console.log("Color for first parent:", color(topLevelParents[0]));
 
@@ -176,57 +173,56 @@ const topLevelParents = [...new Set(root.children.map(d => d.data.name))];
         .innerRadius(d => d.y0 * radius)
         .outerRadius(d => d.y1 * radius);
 
-  const svg = d3.select(this._shadowRoot.getElementById('chart')).append("svg")
+    const svg = d3.select(this._shadowRoot.getElementById('chart')).append("svg")
         .attr("width", width)
         .attr("height", height);
 
-const centerGroup = svg.append("g")
-    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+    const centerGroup = svg.append("g")
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-const groups = centerGroup.selectAll("g")
-    .data(root.descendants().filter(d => d.depth))
-    .enter().append("g");
+    const groups = centerGroup.selectAll("g")
+        .data(root.descendants().filter(d => d.depth))
+        .enter().append("g");
 
-const paths = groups.append("path")
-    .attr("class", "sunburst-arc")
-    .attr("fill", d => {
-        if (d.depth === 2) {
-            return color(d.data.name);
-        } else {
-            let topLevelParent = d;
-            while (topLevelParent.depth > 2) {
-                topLevelParent = topLevelParent.parent;
+    groups.append("path")
+        .attr("class", "sunburst-arc")
+        .attr("fill", d => {
+            if (d.depth === 2) {
+                return color(d.data.name);
+            } else {
+                let topLevelParent = d;
+                while (topLevelParent.depth > 2) {
+                    topLevelParent = topLevelParent.parent;
+                }
+                return color(topLevelParent.data.name);
             }
-            return color(topLevelParent.data.name);
-        }
-    })
-    .attr("d", arc)
-    .append("title")
-    .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${d.value}`);
+        })
+        .attr("d", arc)
+        .append("title")
+        .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${d.value}`);
 
-function truncateText(text, maxLength = 6) {
-    return text.length > maxLength ? text.slice(0, maxLength) + '.' : text;
+    function truncateText(text, maxLength = 6) {
+        return text.length > maxLength ? text.slice(0, maxLength) + '.' : text;
+    }
+
+    groups.append("text")
+        .attr("transform", function(d) {
+            const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
+            const y = d.y0 * radius + 5; // +5 to give a little padding
+            return `rotate(${x - 90}) translate(${y},0) ${x < 120 || x > 270 ? "" : "rotate(180)"}`;
+        })
+        .attr("dy", "0.35em")
+        .attr("text-anchor", d => (d.x0 + d.x1) / 2 * 180 / Math.PI < 120 || (d.x0 + d.x1) / 2 * 180 / Math.PI > 270 ? "start" : "end")
+        .text(d => truncateText(d.data.name))
+        .attr("fill", "black")
+        .attr("font-size", function(d) {
+            const textLength = this.getComputedTextLength();
+            const segmentWidth = (d.x1 - d.x0) * radius * Math.PI; // arc length
+            const fontSize = Math.min(12, 12 * segmentWidth / textLength); // adjust 12 as needed
+            return fontSize + "px";
+        });
 }
 
-groups.append("text")
-    .attr("transform", function(d) {
-        const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
-        const y = d.y0 * radius + 5; // +5 to give a little padding
-        return `rotate(${x - 90}) translate(${y},0) ${x < 120 || x > 270 ? "" : "rotate(180)"}`;
-    })
-    .attr("dy", "0.35em")
-    .attr("text-anchor", d => (d.x0 + d.x1) / 2 * 180 / Math.PI < 120 || (d.x0 + d.x1) / 2 * 180 / Math.PI > 270 ? "start" : "end")
-    .text(d => truncateText(d.data.name))
-    .attr("fill", "black")
-    .attr("font-size", function(d) {
-        const textLength = this.getComputedTextLength();
-        const segmentWidth = (d.x1 - d.x0) * radius * Math.PI; // arc length
-        const fontSize = Math.min(12, 12 * segmentWidth / textLength); // adjust 12 as needed
-        return fontSize + "px";
-    })
-    .attr("pointer-events", "none");  // Prevent flickering
-
-}
     }
 
     customElements.define('sunburst-widget', SunburstWidget);
