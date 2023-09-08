@@ -170,14 +170,26 @@ const svg = d3.select(this._shadowRoot.getElementById('chart')).append("svg")
 const centerGroup = svg.append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-centerGroup.selectAll("path")
+svg.selectAll("path")
     .data(root.descendants().filter(d => d.depth))
     .enter().append("path")
     .attr("class", "sunburst-arc")
-    .attr("fill", d => { while (d.depth > 1) d = d.parent; return color(d.data.name); })
+    .attr("fill", d => {
+        // If it's a top-level parent (depth = 1), assign a new color
+        if (d.depth === 1) {
+            return color(d.data.name);
+        }
+        // Otherwise, find the top-level parent and inherit its color
+        let topLevelParent = d;
+        while (topLevelParent.depth > 1) {
+            topLevelParent = topLevelParent.parent;
+        }
+        return color(topLevelParent.data.name);
+    })
     .attr("d", arc)
     .append("title")
     .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${d.value}`);
+
 
 
 
