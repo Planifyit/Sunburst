@@ -201,9 +201,28 @@ function truncateText(text, maxLength = 6) {
         return text.length > maxLength ? text.slice(0, maxLength) + '.' : text;
     }
 
-    centerGroup.selectAll("text")
+    const groups = centerGroup.selectAll("g")
         .data(root.descendants().filter(d => d.depth))
-        .enter().append("text")
+        .enter().append("g");
+
+    groups.append("path")
+        .attr("class", "sunburst-arc")
+        .attr("fill", d => {
+            if (d.depth === 2) {
+                return color(d.data.name);
+            } else {
+                let topLevelParent = d;
+                while (topLevelParent.depth > 2) {
+                    topLevelParent = topLevelParent.parent;
+                }
+                return color(topLevelParent.data.name);
+            }
+        })
+        .attr("d", arc)
+        .append("title")
+        .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${d.value}`);
+
+    groups.append("text")
         .attr("transform", function(d) {
             const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
             const y = d.y0 * radius + 5; // +5 to give a little padding
@@ -211,7 +230,7 @@ function truncateText(text, maxLength = 6) {
         })
         .attr("dy", "0.35em")
         .attr("text-anchor", d => (d.x0 + d.x1) / 2 * 180 / Math.PI < 120 || (d.x0 + d.x1) / 2 * 180 / Math.PI > 270 ? "start" : "end")
-        .text(d => truncateText(d.data.name)) // Apply truncation here
+        .text(d => truncateText(d.data.name))
         .attr("fill", "black")
         .attr("font-size", function(d) {
             const textLength = this.getComputedTextLength();
