@@ -28,7 +28,13 @@
             "default": 700
         }
     },
-    "methods": {},
+    "methods": {
+        "getDataSource": {
+			"parameters": [],
+			"body": "return this.dataBindings.getDataBinding('dataBinding').getDataSource();",
+			"returnType": "DataSource"
+		}
+    },
     "events": {},
     "dataBindings": {
         "myDataBinding": {
