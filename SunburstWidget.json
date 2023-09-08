@@ -6,6 +6,7 @@
     "license": "",
     "id": "SunburstWidget",
     "version": "1.0.1",
+    "supportsLinkedAnalysisFilterOnSelection": true,
     "icon": "https://planifyit.github.io/Pie_chart/PlanifyIT_Logo2.png",
     "vendor": "Planifyit",
     "webcomponents": [
