@@ -24,6 +24,10 @@
             font: 10px sans-serif;
             text-anchor: middle;
         }
+
+        svg {
+    background-color: transparent; /* or any other color */
+}
     </style>
     <div id="chart"></div>
     <a href="https://www.linkedin.com/company/planifyit" target="_blank" class="follow-link">Follow us on Linkedin - Planifyit</a>
@@ -150,11 +154,12 @@ const partition = data => {
 
             const root = partition(data);
 
-            const svg = d3.select(this._shadowRoot.getElementById('chart')).append("svg")
-                .attr("width", width)
-                .attr("height", height)
-                .append("g")
-                .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+const svg = d3.select(this._shadowRoot.getElementById('chart')).append("svg")
+    .attr("width", "100%")
+    .attr("height", "100%")
+    .append("g")
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
 
             svg.selectAll("path")
                .data(root.descendants().filter(d => d.depth))
