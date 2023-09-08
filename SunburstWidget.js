@@ -133,10 +133,11 @@ _updateData(dataBinding) {
 
         _renderChart(data) {
                console.log("Rendering with data:", data);
-const chartDiv = this._shadowRoot.getElementById('chart');
-const width = chartDiv.clientWidth;
-const height = chartDiv.clientHeight;
-const radius = Math.min(width, height) / 2;
+
+const width = this._props.width || this.offsetWidth;
+const height = this._props.height || this.offsetHeight;            
+const radius = Math.min(width, height) / 20;  // Dividing by 20 instead of 2
+
 
 
 
@@ -165,35 +166,21 @@ const partition = data => {
             const root = partition(data);
 
 const svg = d3.select(this._shadowRoot.getElementById('chart')).append("svg")
-    .attr("width", "100%")
-    .attr("height", "100%")
-    .append("g")
-    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-
-
+    .attr("width", width)
+    .attr("height", height);
 
 const centerGroup = svg.append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-svg.selectAll("path")
+centerGroup.selectAll("path")
     .data(root.descendants().filter(d => d.depth))
     .enter().append("path")
     .attr("class", "sunburst-arc")
-    .attr("fill", d => {
-        // If it's a top-level parent (depth = 1), assign a new color
-        if (d.depth === 1) {
-            return color(d.data.name);
-        }
-        // Otherwise, find the top-level parent and inherit its color
-        let topLevelParent = d;
-        while (topLevelParent.depth > 1) {
-            topLevelParent = topLevelParent.parent;
-        }
-        return color(topLevelParent.data.name);
-    })
+    .attr("fill", d => { while (d.depth > 1) d = d.parent; return color(d.data.name); })
     .attr("d", arc)
     .append("title")
     .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${d.value}`);
+
 
 
 
