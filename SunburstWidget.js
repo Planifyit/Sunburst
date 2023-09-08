@@ -167,7 +167,7 @@ _updateData(dataBinding) {
   
             // Render the chart with the hierarchical data
             this._renderChart(hierarchicalData);
-            his._props.metadata = dataBinding.metadata;
+            this._props.metadata = dataBinding.metadata;
         } else {
             console.error('Data is not an array:', dataBinding.data);
         }
