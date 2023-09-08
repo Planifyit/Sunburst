@@ -135,7 +135,7 @@ _updateData(dataBinding) {
                console.log("Rendering with data:", data);
 const width = this._props.width || this.offsetWidth;
 const height = this._props.height || this.offsetHeight;
-            const radius = Math.min(width, height) / 2;
+     const radius = Math.min(width, height) / 20; 
 
             d3.select(this._shadowRoot.getElementById('chart')).selectAll("*").remove();
 
@@ -175,7 +175,12 @@ const svg = d3.select(this._shadowRoot.getElementById('chart')).append("svg")
                 .attr("fill", d => { while (d.depth > 1) d = d.parent; return color(d.data.name); })
                 .attr("d", arc)
                 .append("title")
-                .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${d.value}`);
+                .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${d.value}`)
+                .append("g")
+                .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+
+            
     console.log(root.descendants().filter(d => d.depth));
 
                      console.log("SVG:", svg);
