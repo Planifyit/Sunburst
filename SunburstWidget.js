@@ -49,7 +49,7 @@
 
             // Load D3.js
             const script = document.createElement('script');
-            script.src = 'https://d3js.org/d3.v5.min.js';
+           script.src = 'https://d3js.org/d3.v7.min.js';
             script.onload = () => this._ready = true;
             this._shadowRoot.appendChild(script);
         }
