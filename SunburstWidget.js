@@ -16,12 +16,14 @@
     transition: transform 0.3s ease-out;
 }
 
-.sunburst-arc:hover, .sunburst-arc:hover + text {
+g:hover {
     transform: scale(1.1);
     transform-origin: center center;
     cursor: pointer;
 }
-
+.sunburst-arc, .sunburst-arc text {
+    transition: transform 0.3s ease-out;
+}
 .sunburst-arc text {
     fill: #fff;
     font: 10px sans-serif;
