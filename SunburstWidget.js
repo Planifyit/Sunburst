@@ -238,7 +238,7 @@ function truncateText(text, maxLength = 7) {
         return "translate(0,0)"; // Center of the circle
     } else {
         const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
-        const y = d.y0 * radius * 0.9 + 5; // +5 to give a little padding
+        const y = d.y0 * radius * 1.1; // +5 to give a little padding
         return `rotate(${x - 90}) translate(${y},0) ${x < 120 || x > 270 ? "" : "rotate(180)"}`;
     }
 })
