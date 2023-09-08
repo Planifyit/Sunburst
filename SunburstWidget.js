@@ -138,6 +138,7 @@ const width = this._props.width || this.offsetWidth;
 const height = this._props.height || this.offsetHeight;            
 const radius = Math.min(width, height) / 20;  // Dividing by 20 instead of 2
 const topLevelParents = [...new Set(data.children.map(d => d.name))];
+console.log("Top Level Parents:", topLevelParents);
 
 
 
@@ -147,6 +148,7 @@ const topLevelParents = [...new Set(data.children.map(d => d.name))];
    const color = d3.scaleOrdinal()
     .domain(topLevelParents)
     .range(d3.schemeCategory10);  // or any other color scheme you prefer
+console.log("Color for first parent:", color(topLevelParents[0]));
 
 
    const arc = d3.arc()
@@ -186,9 +188,10 @@ centerGroup.selectAll("path")
     while (topLevelParent.depth > 1) {
         topLevelParent = topLevelParent.parent;
     }
-    return color(topLevelParent.data.name);
+    const fillColor = color(topLevelParent.data.name);
+    console.log("Color for", topLevelParent.data.name, ":", fillColor);
+    return fillColor;
 })
-
 
     
     .attr("d", arc)
