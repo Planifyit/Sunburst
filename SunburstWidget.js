@@ -136,13 +136,16 @@ _updateData(dataBinding) {
                 .innerRadius(d => d.y0 * radius)
                 .outerRadius(d => Math.min(d.y1 * radius, radius));
 
-            const partition = data => {
-                const root = d3.hierarchy(data)
-                    .sum(d => d.measure)
-                    .sort((a, b) => b.value - a.value);
-                return d3.partition()
-                    .size([2 * Math.PI, root.height + 1])(root);
-            };
+
+const partition = data => {
+    const root = d3.hierarchy(data)
+        .sum(d => d.value)  // Use the value property to determine the size of each segment
+        .sort((a, b) => b.value - a.value);
+    return d3.partition()
+        .size([2 * Math.PI, root.height + 1])(root);
+};
+
+            
 
             const root = partition(data);
 
