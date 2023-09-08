@@ -176,7 +176,17 @@ centerGroup.selectAll("path")
     .data(root.descendants().filter(d => d.depth))
     .enter().append("path")
     .attr("class", "sunburst-arc")
-    .attr("fill", d => { while (d.depth > 1) d = d.parent; return color(d.data.name); })
+    
+.attr("fill", d => {
+    let topLevelParent = d;
+    while (topLevelParent.depth > 1) {
+        topLevelParent = topLevelParent.parent;
+    }
+    return color(topLevelParent.data.name);
+})
+
+
+    
     .attr("d", arc)
     .append("title")
     .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${d.value}`);
