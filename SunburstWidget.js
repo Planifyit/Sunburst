@@ -162,22 +162,21 @@ const partition = data => {
             const root = partition(data);
 
 const svg = d3.select(this._shadowRoot.getElementById('chart')).append("svg")
-    .attr("width", "100%")
-    .attr("height", "100%")
-    .append("g")
+    .attr("width", width)
+    .attr("height", height);
+
+const centerGroup = svg.append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
+centerGroup.selectAll("path")
+    .data(root.descendants().filter(d => d.depth))
+    .enter().append("path")
+    .attr("class", "sunburst-arc")
+    .attr("fill", d => { while (d.depth > 1) d = d.parent; return color(d.data.name); })
+    .attr("d", arc)
+    .append("title")
+    .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${d.value}`);
 
-            svg.selectAll("path")
-               .data(root.descendants().filter(d => d.depth))
-                .enter().append("path")
-                .attr("class", "sunburst-arc")
-                .attr("fill", d => { while (d.depth > 1) d = d.parent; return color(d.data.name); })
-                .attr("d", arc)
-                .append("title")
-                .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${d.value}`)
-                .append("g")
-                .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
 
             
