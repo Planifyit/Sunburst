@@ -18,7 +18,7 @@
 
 .sunburst-arc:hover {
     transform: scale(1.1);
-    transform-origin: 50% 50%;
+    transform-origin: center center;
     cursor: pointer;
 }
         .sunburst-arc text {
@@ -182,44 +182,41 @@ const centerGroup = svg.append("g")
         .data(root.descendants().filter(d => d.depth))
         .enter().append("g");
 
-    groups.append("path")
-        .attr("class", "sunburst-arc")
-        .attr("fill", d => {
-            if (d.depth === 2) {
-                return color(d.data.name);
-            } else {
-                let topLevelParent = d;
-                while (topLevelParent.depth > 2) {
-                    topLevelParent = topLevelParent.parent;
-                }
-                return color(topLevelParent.data.name);
+groups.append("path")
+    .attr("class", "sunburst-arc")
+    .attr("fill", d => {
+        if (d.depth === 2) {
+            return color(d.data.name);
+        } else {
+            let topLevelParent = d;
+            while (topLevelParent.depth > 2) {
+                topLevelParent = topLevelParent.parent;
             }
-        })
-        .attr("d", arc)
-        .append("title")
-        .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${d.value}`);
+            return color(topLevelParent.data.name);
+        }
+    })
+    .attr("d", arc)
+    .append("title")
+    .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${d.value}`);
 
-    function truncateText(text, maxLength = 6) {
-        return text.length > maxLength ? text.slice(0, maxLength) + '.' : text;
-    }
+groups.append("text")
+    .attr("transform", function(d) {
+        const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
+        const y = d.y0 * radius + 5; // +5 to give a little padding
+        return `rotate(${x - 90}) translate(${y},0) ${x < 120 || x > 270 ? "" : "rotate(180)"}`;
+    })
+    .attr("dy", "0.35em")
+    .attr("text-anchor", d => (d.x0 + d.x1) / 2 * 180 / Math.PI < 120 || (d.x0 + d.x1) / 2 * 180 / Math.PI > 270 ? "start" : "end")
+    .text(d => truncateText(d.data.name))
+    .attr("fill", "black")
+    .attr("font-size", function(d) {
+        const textLength = this.getComputedTextLength();
+        const segmentWidth = (d.x1 - d.x0) * radius * Math.PI; // arc length
+        const fontSize = Math.min(12, 12 * segmentWidth / textLength); // adjust 12 as needed
+        return fontSize + "px";
+    })
+    .attr("pointer-events", "none");
 
-    groups.append("text")
-        .attr("transform", function(d) {
-            const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
-            const y = d.y0 * radius + 5; // +5 to give a little padding
-            return `rotate(${x - 90}) translate(${y},0) ${x < 120 || x > 270 ? "" : "rotate(180)"}`;
-        })
-        .attr("dy", "0.35em")
-        .attr("text-anchor", d => (d.x0 + d.x1) / 2 * 180 / Math.PI < 120 || (d.x0 + d.x1) / 2 * 180 / Math.PI > 270 ? "start" : "end")
-        .text(d => truncateText(d.data.name))
-        .attr("fill", "black")
-        .attr("font-size", function(d) {
-            const textLength = this.getComputedTextLength();
-            const segmentWidth = (d.x1 - d.x0) * radius * Math.PI; // arc length
-            const fontSize = Math.min(12, 12 * segmentWidth / textLength); // adjust 12 as needed
-            return fontSize + "px";
-        })
-        .attr("pointer-events", "none");
 }
     }
 
