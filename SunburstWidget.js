@@ -185,7 +185,7 @@ _updateData(dataBinding) {
 
     const width = this._props.width || this.offsetWidth;
     const height = this._props.height || this.offsetHeight;            
-    const radius = Math.min(width, height) / 20 * 1.5;  // 
+    const radius = Math.min(width, height) / 20 * 1.9;  // 
 
     d3.select(this._shadowRoot.getElementById('chart')).selectAll("*").remove();
 
