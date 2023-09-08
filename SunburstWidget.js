@@ -197,30 +197,25 @@ _updateData(dataBinding) {
     console.log(root.descendants().filter(d => d.depth));
     console.log("SVG:", svg);
 
-      centerGroup.selectAll("text")
-    .data(root.descendants().filter(d => d.depth))
-    .enter().append("text")
-    .attr("transform", function(d) {
-        const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
-        const y = (d.y0 + d.y1) / 2 * radius;
-        return `rotate(${x - 90}) translate(${y},0) ${x < 120 || x > 270 ? "" : "rotate(180)"}`;
-    })
-    .attr("dy", "0.35em")
-    .attr("text-anchor", d => (d.x0 + d.x1) / 2 * 180 / Math.PI < 120 || (d.x0 + d.x1) / 2 * 180 / Math.PI > 270 ? "start" : "end")
-    .text(d => {
-    const text = d.data.name;
-    return text.length > 10 ? text.substring(0, 10) + "..." : text;
-})
-
-    .attr("fill", "black")
-    .attr("font-size", function(d) {
-    const textLength = this.getComputedTextLength();
-    return Math.min(2 * d.r, (2 * d.r - 8) / textLength * 12) + "px";
-})
-
-    .attr("pointer-events", "none");
-
-      
+     centerGroup.selectAll("text")
+        .data(root.descendants().filter(d => d.depth))
+        .enter().append("text")
+        .attr("transform", function(d) {
+            const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
+            const y = (d.y0 + d.y1) / 2 * radius;
+            return `rotate(${x - 90}) translate(${y},0) ${x < 120 || x > 270 ? "" : "rotate(180)"}`;
+        })
+        .attr("dy", "0.35em")
+        .attr("text-anchor", d => (d.x0 + d.x1) / 2 * 180 / Math.PI < 120 || (d.x0 + d.x1) / 2 * 180 / Math.PI > 270 ? "start" : "end")
+        .text(d => d.data.name)
+        .attr("fill", "black")
+        .attr("font-size", function(d) {
+            const textLength = this.getComputedTextLength();
+            const segmentWidth = (d.x1 - d.x0) * radius;
+            const fontSize = Math.min(2 * d.r, (2 * d.r - 8) / textLength * 12);
+            return segmentWidth < textLength ? fontSize * 0.8 + "px" : fontSize + "px";
+        })
+        .attr("pointer-events", "none");
 }
 
  
