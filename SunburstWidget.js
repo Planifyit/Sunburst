@@ -207,9 +207,17 @@ _updateData(dataBinding) {
     })
     .attr("dy", "0.35em")
     .attr("text-anchor", d => (d.x0 + d.x1) / 2 * 180 / Math.PI < 120 || (d.x0 + d.x1) / 2 * 180 / Math.PI > 270 ? "start" : "end")
-    .text(d => d.data.name)
+    .text(d => {
+    const text = d.data.name;
+    return text.length > 10 ? text.substring(0, 10) + "..." : text;
+})
+
     .attr("fill", "black")
-    .attr("font-size", d => Math.min(2 * d.r, (2 * d.r - 8) / this.getComputedTextLength() * 12) + "px")
+    .attr("font-size", function(d) {
+    const textLength = this.getComputedTextLength();
+    return Math.min(2 * d.r, (2 * d.r - 8) / textLength * 12) + "px";
+})
+
     .attr("pointer-events", "none");
 
       
