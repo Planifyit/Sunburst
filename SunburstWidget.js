@@ -187,7 +187,7 @@ const partition = data => {
         .startAngle(d => d.x0)
         .endAngle(d => d.x1)
         .innerRadius(d => d.y0 * radius * 0.9)
-        .outerRadius(d => d.y1 * radius);
+       .outerRadius(d => d.y0 * radius + (d.y1 - d.y0) * radius * 1.1);
 
 const svg = d3.select(this._shadowRoot.getElementById('chart')).append("svg")
     .attr("viewBox", `0 0 ${width} ${height}`)
