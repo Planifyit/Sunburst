@@ -10,20 +10,18 @@
     background-repeat: no-repeat;
     background-position: center;
     }
+    
     .sunburst-arc {
     stroke: #fff;
     transition: transform 0.3s ease-out;
 }
 
-.sunburst-arc {
-    stroke: #fff;
-    transition: transform 0.3s ease-out;
-}
-
-g:hover .sunburst-arc {
+g:hover {
     transform: scale(1.1);
     transform-origin: center center;
+    cursor: pointer;
 }
+
 .sunburst-arc text {
     fill: #fff;
     font: 10px sans-serif;
@@ -38,7 +36,7 @@ svg {
 #chart {
     width: 100%;
     height: 80%;  /* Adjust this value as needed */
-    overflow: hidden;  /* This will ensure that the SVG doesn't overflow its container */
+    overflow: visible;  /* Change this to visible */
 }
 
 
@@ -215,12 +213,12 @@ _renderChart(data) {
         .attr("text-anchor", d => (d.x0 + d.x1) / 2 * 180 / Math.PI < 120 || (d.x0 + d.x1) / 2 * 180 / Math.PI > 270 ? "start" : "end")
         .text(d => truncateText(d.data.name))
         .attr("fill", "black")
-        .attr("font-size", function(d) {
-            const textLength = this.getComputedTextLength();
-            const segmentWidth = (d.x1 - d.x0) * radius * Math.PI; // arc length
-            const fontSize = Math.min(12, 12 * segmentWidth / textLength); // adjust 12 as needed
-            return fontSize + "px";
-        });
+      .attr("font-size", function(d) {
+        const textLength = this.getComputedTextLength();
+        const segmentWidth = (d.x1 - d.x0) * radius * Math.PI; // arc length
+        const fontSize = Math.min(12, 12 * segmentWidth / textLength); // adjust 12 as needed
+        return fontSize + "px";
+    });
 }
 
     }
