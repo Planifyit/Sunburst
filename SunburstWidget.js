@@ -1,5 +1,19 @@
 (function() {
     let tmpl = document.createElement('template');
+    const parseMetadata = metadata => {
+    const { dimensions: dimensionsMap, mainStructureMembers: measuresMap } = metadata;
+    const dimensions = [];
+    for (const key in dimensionsMap) {
+        const dimension = dimensionsMap[key];
+        dimensions.push({ key, ...dimension });
+    }
+    const measures = [];
+    for (const key in measuresMap) {
+        const measure = measuresMap[key];
+        measures.push({ key, ...measure });
+    }
+    return { dimensions, measures, dimensionsMap, measuresMap };
+};
     tmpl.innerHTML = `
     <style>
 .image-container {
@@ -153,6 +167,7 @@ _updateData(dataBinding) {
   
             // Render the chart with the hierarchical data
             this._renderChart(hierarchicalData);
+            his._props.metadata = dataBinding.metadata;
         } else {
             console.error('Data is not an array:', dataBinding.data);
         }
