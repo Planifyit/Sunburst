@@ -103,6 +103,25 @@ transformToHierarchy(data) {
     return hierarchy;
 }
 
+_handleSegmentClick(d) {
+    const { dimensions } = parseMetadata(this._props.metadata);  // Use the metadata from your props
+    const [dimension] = dimensions;
+
+    const linkedAnalysis = this._props['dataBindings'].getDataBinding('myDataBinding').getLinkedAnalysis();
+
+    if (d.selected) {
+        // If the segment is already selected, remove the filter
+        linkedAnalysis.removeFilters();
+        d.selected = false;  // Reset the selected flag
+    } else {
+        const selection = {};
+        const key = dimension.key;
+        const dimensionId = dimension.id;
+        selection[dimensionId] = d.data[key].id;  // Assuming the ID in your data corresponds to the filter value
+        linkedAnalysis.setFilters(selection);
+        d.selected = true;  // Set the selected flag
+    }
+}
 
 _onResize() {
     // Re-render the chart when the widget is resized
