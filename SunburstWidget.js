@@ -149,7 +149,8 @@ _updateData(dataBinding) {
     };
 
     const root = partition(data);
-    const topLevelParents = [...new Set(root.descendants().filter(d => d.depth === 1).map(d => d.data.name))];
+    const topLevelParents = [...new Set(root.descendants().filter(d => d.depth === 2).map(d => d.parent.data.name))];
+
     console.log("Top Level Parents:", topLevelParents);
 
     const color = d3.scaleOrdinal()
