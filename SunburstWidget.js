@@ -51,7 +51,8 @@
             this._shadowRoot = this.attachShadow({mode: 'open'});
             this._shadowRoot.appendChild(tmpl.content.cloneNode(true));
             this._props = {};
-
+    this.resizeObserver = new ResizeObserver(() => this._onResize());
+    this.resizeObserver.observe(this);
             // Load D3.js
             const script = document.createElement('script');
            script.src = 'https://d3js.org/d3.v7.min.js';
@@ -103,9 +104,13 @@ transformToHierarchy(data) {
 }
 
 
-
+_onResize() {
+    // Re-render the chart when the widget is resized
+    this._renderChart(this.currentData);  // assuming you've stored the current data in this.currentData
+}
 
 _updateData(dataBinding) {
+    
     console.log('dataBinding:', dataBinding);
 
     // Check if dataBinding is in a loading state
@@ -125,15 +130,20 @@ _updateData(dataBinding) {
         if (Array.isArray(dataBinding.data)) {
             // Transform the flat data into a hierarchical structure
             const hierarchicalData = this.transformToHierarchy(dataBinding.data);
-
+             this.currentData = this.transformToHierarchy(dataBinding.data);
+  
             // Render the chart with the hierarchical data
             this._renderChart(hierarchicalData);
         } else {
             console.error('Data is not an array:', dataBinding.data);
         }
     }
+    
 }
 
+        disconnectedCallback() {
+    this.resizeObserver.disconnect();
+}
 
 
   _renderChart(data) {
@@ -179,10 +189,11 @@ const partition = data => {
         .innerRadius(d => d.y0 * radius * 0.9)
         .outerRadius(d => d.y1 * radius);
 
-    const svg = d3.select(this._shadowRoot.getElementById('chart')).append("svg")
-        .attr("width", width)
-        .attr("height", height);
-
+const svg = d3.select(this._shadowRoot.getElementById('chart')).append("svg")
+    .attr("viewBox", `0 0 ${width} ${height}`)
+    .attr("width", "100%")
+    .attr("height", "100%");
+      
     const centerGroup = svg.append("g")
         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
