@@ -16,7 +16,7 @@
             transition: transform 0.3s ease-out;
         }
 
-.sunburst-arc:hover {
+g:hover {
     transform: scale(1.1);
     transform-origin: center center;
     cursor: pointer;
@@ -178,11 +178,11 @@ const topLevelParents = [...new Set(root.children.map(d => d.data.name))];
 const centerGroup = svg.append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-    const groups = centerGroup.selectAll("g")
-        .data(root.descendants().filter(d => d.depth))
-        .enter().append("g");
+const groups = centerGroup.selectAll("g")
+    .data(root.descendants().filter(d => d.depth))
+    .enter().append("g");
 
-groups.append("path")
+const paths = groups.append("path")
     .attr("class", "sunburst-arc")
     .attr("fill", d => {
         if (d.depth === 2) {
@@ -196,13 +196,14 @@ groups.append("path")
         }
     })
     .attr("d", arc)
+    .attr("pointer-events", "none")  // Prevent flickering
     .append("title")
     .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${d.value}`);
 
-          function truncateText(text, maxLength = 6) {
-        return text.length > maxLength ? text.slice(0, maxLength) + '.' : text;
-    }
-      
+function truncateText(text, maxLength = 6) {
+    return text.length > maxLength ? text.slice(0, maxLength) + '.' : text;
+}
+
 groups.append("text")
     .attr("transform", function(d) {
         const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
@@ -219,7 +220,7 @@ groups.append("text")
         const fontSize = Math.min(12, 12 * segmentWidth / textLength); // adjust 12 as needed
         return fontSize + "px";
     })
-    .attr("pointer-events", "none");
+    .attr("pointer-events", "none");  // Prevent flickering
 
 }
     }
