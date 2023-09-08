@@ -153,15 +153,14 @@ _updateData(dataBinding) {
                 .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
             svg.selectAll("path")
-                console.log(root.descendants().filter(d => d.depth));
-
-                .data(root.descendants().filter(d => d.depth))
+               .data(root.descendants().filter(d => d.depth))
                 .enter().append("path")
                 .attr("class", "sunburst-arc")
                 .attr("fill", d => { while (d.depth > 1) d = d.parent; return color(d.data.name); })
                 .attr("d", arc)
                 .append("title")
                 .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${d.value}`);
+    console.log(root.descendants().filter(d => d.depth));
 
                      console.log("SVG:", svg);
           
