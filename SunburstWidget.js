@@ -230,7 +230,7 @@ function truncateText(text, maxLength = 6) {
         .enter().append("text")
         .attr("transform", function(d) {
             const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
-            const y = d.y0 * radius + 5; // +5 to give a little padding
+            const y = d.y0 * radius * 0.9 + 5; // +5 to give a little padding
             return `rotate(${x - 90}) translate(${y},0) ${x < 120 || x > 270 ? "" : "rotate(180)"}`;
         })
         .attr("dy", "0.35em")
@@ -239,7 +239,7 @@ function truncateText(text, maxLength = 6) {
         .attr("fill", "black")
         .attr("font-size", function(d) {
             const textLength = this.getComputedTextLength();
-            const segmentWidth = (d.x1 - d.x0) * radius * Math.PI; // arc length
+            const segmentWidth = (d.x1 - d.x0) * radius * 0.9 * Math.PI; // arc length
             const fontSize = Math.min(12, 12 * segmentWidth / textLength); // adjust 12 as needed
             return fontSize + "px";
         })
