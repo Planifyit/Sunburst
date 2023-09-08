@@ -1,6 +1,6 @@
 # Sunburst Widget for SAC
 
-![Your Logo](https://yourwebsite.github.io/SunburstWidget/Your_Logo.png)
+![Planifyit Logo](https://planifyit.github.io/Pie_chart/PlanifyIT_Logo2.png)
 
 The Sunburst widget is a custom-built visualization designed to integrate seamlessly with SAP Analytics Cloud (SAC). It provides users with a hierarchical view of their data, allowing for a deeper understanding of data distribution across multiple levels.
 
