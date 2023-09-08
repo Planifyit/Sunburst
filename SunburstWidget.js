@@ -15,10 +15,12 @@
             stroke: #fff;
             transition: transform 0.3s ease-out;
         }
-        .sunburst-arc:hover {
-            transform: scale(1.1);
-            cursor: pointer;
-        }
+
+.sunburst-arc:hover {
+    transform: scale(1.1);
+    transform-origin: center;
+    cursor: pointer;
+}
         .sunburst-arc text {
             fill: #fff;
             font: 10px sans-serif;
@@ -154,7 +156,7 @@ _updateData(dataBinding) {
     };
 
     const root = partition(data);
- const topLevelParents = [...new Set(root.children.map(d => d.data.name))];
+const topLevelParents = [...new Set(root.children.map(d => d.data.name))];
 
 
     console.log("Top Level Parents:", topLevelParents);
@@ -171,41 +173,14 @@ _updateData(dataBinding) {
         .innerRadius(d => d.y0 * radius)
         .outerRadius(d => d.y1 * radius);
 
-    const svg = d3.select(this._shadowRoot.getElementById('chart')).append("svg")
+  const svg = d3.select(this._shadowRoot.getElementById('chart')).append("svg")
         .attr("width", width)
         .attr("height", height);
 
     const centerGroup = svg.append("g")
         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-    centerGroup.selectAll("path")
-        .data(root.descendants().filter(d => d.depth))
-        .enter().append("path")
-        .attr("class", "sunburst-arc")
-  .attr("fill", d => {
-    if (d.depth === 2) {
-        return color(d.data.name);
-    } else {
-        let topLevelParent = d;
-        while (topLevelParent.depth > 2) {
-            topLevelParent = topLevelParent.parent;
-        }
-        return color(topLevelParent.data.name);
-    }
-})
-
-
-        .attr("d", arc)
-        .append("title")
-        .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${d.value}`);
-      
-    console.log(root.descendants().filter(d => d.depth));
-    console.log("SVG:", svg);
-
-function truncateText(text, maxLength = 6) {
-        return text.length > maxLength ? text.slice(0, maxLength) + '.' : text;
-    }
-  const groups = centerGroup.selectAll("g")
+    const groups = centerGroup.selectAll("g")
         .data(root.descendants().filter(d => d.depth))
         .enter().append("g");
 
@@ -225,6 +200,10 @@ function truncateText(text, maxLength = 6) {
         .attr("d", arc)
         .append("title")
         .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${d.value}`);
+
+    function truncateText(text, maxLength = 6) {
+        return text.length > maxLength ? text.slice(0, maxLength) + '.' : text;
+    }
 
     groups.append("text")
         .attr("transform", function(d) {
