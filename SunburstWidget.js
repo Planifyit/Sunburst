@@ -235,7 +235,8 @@ const svg = d3.select(this._shadowRoot.getElementById('chart')).append("svg")
 
         .attr("d", arc)
         .append("title")
-        .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${d.value}`);
+        .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${d.value}`)
+          .on("click", d => this._handleSegmentClick(d));
       
     console.log(root.descendants().filter(d => d.depth));
     console.log("SVG:", svg);
