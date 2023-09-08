@@ -177,13 +177,18 @@ _updateData(dataBinding) {
         .data(root.descendants().filter(d => d.depth))
         .enter().append("path")
         .attr("class", "sunburst-arc")
-   .attr("fill", d => {
-    let topLevelParent = d;
-    while (topLevelParent.depth > 1) {
-        topLevelParent = topLevelParent.parent;
+  .attr("fill", d => {
+    if (d.depth === 2) {
+        return color(d.data.name);
+    } else {
+        let topLevelParent = d;
+        while (topLevelParent.depth > 2) {
+            topLevelParent = topLevelParent.parent;
+        }
+        return color(topLevelParent.data.name);
     }
-    return color(topLevelParent.data.name);
 })
+
 
         .attr("d", arc)
         .append("title")
