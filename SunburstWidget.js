@@ -131,7 +131,7 @@ _handleSegmentClick(d) {
         const selection = {};
         const key = dimension.key;
         const dimensionId = dimension.id;
-        selection[dimensionId] = d.data[key].id;  // Assuming the ID in your data corresponds to the filter value
+        selection[dimensionId] = d.data[key].id;  
         linkedAnalysis.setFilters(selection);
         d.selected = true;  // Set the selected flag
     }
